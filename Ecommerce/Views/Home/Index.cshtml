@@ -1,0 +1,114 @@
+﻿@using Ecommerce.ViewModels
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- سلايدر -->
+<div class="swiper mySwiper mb-5">
+    <div class="swiper-wrapper">
+        @foreach (var slide in Model.SliderImages)
+        {
+            <div class="swiper-slide">
+                <img src="@slide.Image" class="w-100 rounded-4 shadow-sm" style="height:350px; object-fit:cover;" />
+            </div>
+        }
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>
+
+<!-- الأقسام -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4 text-primary">Shop By Categories</h2>
+        <div class="row gx-2 gy-3 justify-content-center">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="col-4 col-md-2 col-lg-1-5">
+                    <a asp-controller="Products" asp-action="Index" asp-route-categoryid="@category.Id" class="text-decoration-none text-dark">
+                        <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden" style="height: 120px;">
+                            <img src="@category.Image" class="w-100 h-100" style="object-fit: cover;" alt="@category.Name" />
+                            <div class="position-absolute bottom-0 start-0 w-100 text-center p-1" style="background: rgba(0,0,0,0.5);">
+                                <h6 class="text-white small mb-0">@category.Name</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+
+<!-- المنتجات -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4 text-primary">Best Selling Products</h2>
+        <div class="row gx-3 gy-4 justify-content-center">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                       class="text-decoration-none text-dark">
+                        <div class="card h-100 border-0 shadow-sm hover-zoom position-relative" style="transition: transform 0.3s;">
+                            <img src="@product.Image" class="card-img-top rounded-top" alt="@product.Name" style="height:160px; object-fit:cover;">
+                            <div class="card-body text-center p-2">
+                                <h6 class="fw-bold m-0">@product.Name</h6>
+                                <p class="text-success fw-bold small">$@product.Price</p>
+                            </div>
+                            <div class="card-footer bg-white text-center border-0 p-2">
+                                <button type="button"
+                                        class="btn btn-outline-primary btn-sm w-100 rounded-pill add-to-cart-btn"
+                                        asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id"
+                                        onclick="event.stopPropagation();">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+<!-- ستايلات إضافية -->
+<style>
+    .hover-zoom:hover {
+        transform: scale(1.03);
+        transition: 0.4s;
+    }
+
+    .swiper-slide img {
+        border-radius: 1rem;
+    }
+</style>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.mySwiper', {
+            loop: true,
+            autoplay: {
+                delay: 3000,  // 3 ثواني بين كل سلايد
+                disableOnInteraction: false, // يفضل يكمل بعد ما المستخدم يتفاعل
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+        });
+    </script>
+}

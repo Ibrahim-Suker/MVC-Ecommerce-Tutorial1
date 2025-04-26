@@ -1,0 +1,122 @@
+﻿@model Address
+@{
+    List<Address> addresses = ViewBag.Addresses;
+}
+
+<div class="container py-4">
+    <h2 class="mb-4 text-center">Select Delivery Address</h2>
+
+    <!-- Address Cards Section -->
+    @if (addresses.Any())
+    {
+        <div class="row g-3 mb-5">
+            @foreach (var address in addresses)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 border shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title mb-3">@address.User.UserName</h5>
+                            </div>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                @address.AddressLine<br>
+                                @address.City, @address.State<br>
+                                @address.PinCode
+                            </p>
+                            <div class="d-grid">
+                                <a asp-controller="Checkout" asp-action="Confirm" asp-route-addressId="@address.Id" 
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-truck me-1"></i> Deliver Here
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mb-4 text-center">
+            <i class="fas fa-info-circle me-2"></i> You don't have any saved addresses. Please add a new address below.
+        </div>
+    }
+
+    <!-- Add New Address Form -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h4 class="card-title mb-4 text-center">Add New Address</h4>
+            
+            <form asp-action="Index">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <div class="form-floating mb-3">
+                            <input asp-for="AddressLine" class="form-control" placeholder=" " />
+                            <label asp-for="AddressLine"></label>
+                            <span asp-validation-for="AddressLine" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for="City" class="form-control" placeholder=" " />
+                            <label asp-for="City"></label>
+                            <span asp-validation-for="City" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for="State" class="form-control" placeholder=" " />
+                            <label asp-for="State"></label>
+                            <span asp-validation-for="State" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for="PinCode" class="form-control" placeholder=" " />
+                            <label asp-for="PinCode"></label>
+                            <span asp-validation-for="PinCode" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Save Address
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .form-floating label {
+            color: #6c757d;
+        }
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
